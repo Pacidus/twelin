@@ -71,8 +71,7 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
     kwargs = {"comments": "", "delimiter": ","}
     if index is None:
         index = pf.schema_arrow.names
-    head = ",".join(index)
-    np.savetxt(name, [], header=head, **kwargs)
+    np.savetxt(name, [], header=",".join(index), **kwargs)
     with open(name, "a") as csvfile:
         aparquet(
             pf,
