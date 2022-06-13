@@ -57,7 +57,7 @@ def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
     return out
 
 
-def parquet2csv(name, pf, sample=dsmpl):
+def parquet2csv(name, pf, index=didx, sample=dsmpl):
     """
     Convert a parquet file to a csv file
 
@@ -69,7 +69,13 @@ def parquet2csv(name, pf, sample=dsmpl):
         the parquet file we want to convert
     """
     kwargs = {"comments": "", "delimiter": ","}
-    head = ",".join(pf.schema_arrow.names)
+    if index is None:
+        index = pf.schema_arrow.names
+    head = ",".join(index)
     np.savetxt(name, [], header=head, **kwargs)
     with open(name, "a") as csvfile:
-        aparquet(pf, lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs))
+        aparquet(
+            pf,
+            lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs),
+            index=index,
+        )
