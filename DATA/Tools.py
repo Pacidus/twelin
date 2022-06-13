@@ -63,9 +63,9 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
 
     Parameters
     ----------
-    name: str
+    name : str
         the name of the file
-    pf: pq.ParquetFile
+    pf : pq.ParquetFile
         the parquet file we want to convert
     """
     kwargs = {"comments": "", "delimiter": ","}
@@ -78,3 +78,24 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
             lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs),
             index=index,
         )
+
+
+def stats(pf, index=didx, sample=dsmpl):
+    """
+    Gather statistical data over the parquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile
+        the parquet file we want to itterate through.
+    index : list(str)
+        index we want to keep from pf
+    sample : int
+        size of the sample
+
+    Returns
+    -------
+    pd.dataframe
+        dataframe with columns corresponding to:
+            mean, standard deviation, min, max
+    """
