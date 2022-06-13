@@ -2,6 +2,7 @@
 # --    Imports   -- #
 # -- Nothing much -- #
 ######################
+import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 
@@ -17,6 +18,11 @@ dsmpl = int(1e6)
 didx = None
 dkwa = dict()
 darg = []
+
+
+###################
+# -- Functions -- #
+###################
 
 
 def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
@@ -49,3 +55,25 @@ def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
         data = batch.to_pandas()
         out.append(func(data, *args, **kwargs))
     return out
+
+
+def parquet2csv(name, pf, sample=dsmpl):
+    """
+    Convert a parquet file to a csv file
+
+    Parameters
+    ----------
+    name: str
+        the name of the file
+    pf: pq.ParquetFile
+        the parquet file we want to convert
+    """
+    kwargs = {"comments": "", "delimiter": ","}
+    head = ",".join(pf.schema_arrow.names)
+    np.savetxt(name, [], header=head, **kwargs)
+    with open(name, "a") as csvfile:
+        aparquet(
+            pf,
+            lambda dtf, of, kwa: np.savetxt(csvfile, dtf.values, **kwargs),
+            args=[csvfile, kwargs],
+        )
