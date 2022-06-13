@@ -72,8 +72,4 @@ def parquet2csv(name, pf, sample=dsmpl):
     head = ",".join(pf.schema_arrow.names)
     np.savetxt(name, [], header=head, **kwargs)
     with open(name, "a") as csvfile:
-        aparquet(
-            pf,
-            lambda dtf, of, kwa: np.savetxt(csvfile, dtf.values, **kwargs),
-            args=[csvfile, kwargs],
-        )
+        aparquet(pf, lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs))
