@@ -20,6 +20,30 @@ dkwa = dict()
 darg = []
 
 
+#################
+# -- Classes -- #
+#################
+
+
+class upstats:
+    def __init__(self):
+        self.mean = 0
+        self.var = 0
+        self.min = 0
+        self.max = 0
+        self.N = 0
+
+    def update(self, df):
+        Nb = df.shape[0]
+        Nab = self.N + Nb
+        d = df.mean - self.mean()
+        self.mean += d * Nb / Nab
+        self.var += df.var() + d * d * (self.N * Nb) / Nab
+        self.N = Nab
+        self.min = np.minimum(self.min, df.min())
+        self.max = np.maximum(self.max, df.max())
+
+
 ###################
 # -- Functions -- #
 ###################
@@ -95,7 +119,10 @@ def stats(pf, index=didx, sample=dsmpl):
 
     Returns
     -------
-    pd.dataframe
-        dataframe with columns corresponding to:
-            mean, standard deviation, min, max
+    upstats:
+        class with following public variables
+            mean, variation, min, max, N
     """
+    vals = upstats()
+    aparquet(pf, vals.update, index=index, sample=sample)
+    return vals
