@@ -3,7 +3,6 @@
 # -- Nothing much -- #
 ######################
 import numpy as np
-import pandas as pd
 import pyarrow.parquet as pq
 
 
@@ -56,7 +55,7 @@ class upstats:
             self.__first__ = False
 
 
-###################ndiagram_val
+###################
 # -- Functions -- #
 ###################
 
@@ -99,7 +98,7 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
 
     Parameters
     ----------
-    oname : str
+    name : str
         the name of the file
     pf : pq.ParquetFile or str
         the parquet file or path
@@ -123,10 +122,34 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
         )
 
 
-def csv2parquet(oname, iname, index=didx, sample=dsmpl):
+def csv2parquet(pf, name, index=didx, sample=dsmpl):
     """
-    Convert a
+    Convert a csv file into a parquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile or str
+        the parquet file or path
+    name : str
+        the name of the file
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
     """
+    if type(pf) is str:
+        pf = pq.ParquetFile(pf)
+
+    kwargs = {"comments": "", "delimiter": ","}
+    if index is None:
+        index = pf.schema_arrow.names
+    np.savetxt(name, [], header=",".join(index), **kwargs)
+    with open(name, "a") as csvfile:
+        aparquet(
+            pf,
+            lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs),
+            index=index,
+        )
 
 
 def stats(pf, index=didx, sample=dsmpl):
