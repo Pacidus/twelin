@@ -108,9 +108,9 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    match type(pf):
-        case str:
-            pf = pq.ParquetFile(pf)
+    if type(pf) is str:
+        pf = pq.ParquetFile(pf)
+
     kwargs = {"comments": "", "delimiter": ","}
     if index is None:
         index = pf.schema_arrow.names
