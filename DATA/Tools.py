@@ -56,7 +56,7 @@ class upstats:
             self.__first__ = False
 
 
-###################
+###################ndiagram_val
 # -- Functions -- #
 ###################
 
@@ -71,13 +71,13 @@ def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
         the parquet file we want to itterate through.
     func : python function
         funtion that take a panda dataframe in input and *args, **kwargs.
-    args : list or tuple
+    args : list or tuple, optional
         arguments of func.
-    kwargs : dict
+    kwargs : dict, optional
         keyword arguments of func
-    index : list(str)
+    index : list(str), optional
         index we want to keep from pf
-    sample : int
+    sample : int, optional
         size of the sample
 
     Returns
@@ -99,11 +99,18 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
 
     Parameters
     ----------
-    name : str
+    oname : str
         the name of the file
-    pf : pq.ParquetFile
-        the parquet file we want to convert
+    pf : pq.ParquetFile or str
+        the parquet file or path
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
     """
+    match type(pf):
+        case str:
+            pf = pq.ParquetFile(pf)
     kwargs = {"comments": "", "delimiter": ","}
     if index is None:
         index = pf.schema_arrow.names
@@ -116,6 +123,12 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
         )
 
 
+def csv2parquet(oname, iname, index=didx, sample=dsmpl):
+    """
+    Convert a
+    """
+
+
 def stats(pf, index=didx, sample=dsmpl):
     """
     Gather statistical data over the parquet file
@@ -124,9 +137,9 @@ def stats(pf, index=didx, sample=dsmpl):
     ----------
     pf : pq.ParquetFile
         the parquet file we want to itterate through.
-    index : list(str)
+    index : list(str), optional
         index we want to keep from pf
-    sample : int
+    sample : int, optional
         size of the sample
 
     Returns
