@@ -3,8 +3,9 @@
 # -- Nothing much -- #
 ######################
 import numpy as np
+import pandas as pd
+import pyarrow as pa
 import pyarrow.parquet as pq
-
 
 #########################
 # -- Global Varibles -- #
@@ -122,14 +123,14 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
         )
 
 
-def csv2parquet(pf, name, index=didx, sample=dsmpl):
+def csv2parquet(pname, name, index=didx, sample=dsmpl):
     """
     Convert a csv file into a parquet file
 
     Parameters
     ----------
-    pf : pq.ParquetFile or str
-        the parquet file or path
+    pname : str
+        the path of the parquet file
     name : str
         the name of the file
     index : list(str), optional
@@ -137,19 +138,14 @@ def csv2parquet(pf, name, index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    if type(pf) is str:
-        pf = pq.ParquetFile(pf)
-
-    kwargs = {"comments": "", "delimiter": ","}
-    if index is None:
-        index = pf.schema_arrow.names
-    np.savetxt(name, [], header=",".join(index), **kwargs)
-    with open(name, "a") as csvfile:
-        aparquet(
-            pf,
-            lambda dtf: np.savetxt(csvfile, dtf.values, **kwargs),
-            index=index,
-        )
+    with pd.read_csv(name, chunksize=sample) as reader:
+        chunk = next(reader)
+        table = pa.Table.from_pandas(chunk)
+        pqwriter = pq.ParquetWriter(pname, table.schema)
+        pqwriter.write_table(table)
+        for chunk in reader:
+            table = pa.Table.from_pandas(chunk)
+            pqwriter.write_table(table)
 
 
 def stats(pf, index=didx, sample=dsmpl):
