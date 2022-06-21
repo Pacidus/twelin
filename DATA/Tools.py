@@ -138,7 +138,7 @@ def csv2parquet(pname, name, index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    with pd.read_csv(name, chunksize=sample) as reader:
+    with pd.read_csv(name, usecols=index, chunksize=sample) as reader:
         chunk = next(reader)
         table = pa.Table.from_pandas(chunk)
         pqwriter = pq.ParquetWriter(pname, table.schema)
