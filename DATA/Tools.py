@@ -18,7 +18,7 @@ dsmpl = int(1e6)
 didx = None
 dkwa = dict()
 darg = []
-
+Uniq = np.unique
 
 #################
 # -- Classes -- #
@@ -170,3 +170,31 @@ def stats(pf, index=didx, sample=dsmpl):
     vals = upstats()
     aparquet(pf, vals.update, index=index, sample=sample)
     return vals
+
+
+def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
+    """
+    Split a parquet file into many subparquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile
+        the parquetfile we want to split
+    goto : python function
+        function that return a list that assign any row to a number
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
+    """
+    schema = pf.schema
+    outs = Uniq(aparquet(pf, lambda df: Uniq(goto(df)), index, sample))
+    pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
+
+    def split(df):
+        vec = goto(df)
+        sns = np.unique(vec)
+        for sn in sns:
+            pqfs[sn].write_table(df[vec == sn])
+
+    aparquet(pf, goto, index, sample)
