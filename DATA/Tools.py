@@ -18,7 +18,7 @@ dsmpl = int(1e6)
 didx = None
 dkwa = dict()
 darg = []
-
+Uniq = np.unique
 
 #################
 # -- Classes -- #
@@ -35,6 +35,14 @@ class upstats:
         self.__first__ = True
 
     def update(self, df):
+        """
+        update the statistics of the hole set through batches
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            the new batch to update the stats with
+        """
         if not self.__first__:
             Na = self.N
             Nb = df.shape[0]
@@ -170,3 +178,35 @@ def stats(pf, index=didx, sample=dsmpl):
     vals = upstats()
     aparquet(pf, vals.update, index=index, sample=sample)
     return vals
+
+
+def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
+    """
+    Split a parquet file into many subparquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile
+        the parquetfile we want to split
+    goto : python function
+        function that return a list that assign any row to a number
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
+    """
+    schema = pf.schema_arrow
+    outs = Uniq(
+        aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
+    )
+    pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
+
+    def split(df):
+        vec = goto(df)
+        sns = np.unique(vec)
+        for sn in sns:
+            pqfs[sn].write_table(
+                pa.Table.from_pandas(df[vec == sn].reset_index(drop=True))
+            )
+
+    aparquet(pf, split, index=index, sample=sample)
