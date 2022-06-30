@@ -35,6 +35,14 @@ class upstats:
         self.__first__ = True
 
     def update(self, df):
+        """
+        update the statistics of the hole set through batches
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            the new batch to update the stats with
+        """
         if not self.__first__:
             Na = self.N
             Nb = df.shape[0]
@@ -187,14 +195,18 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    schema = pf.schema
-    outs = Uniq(aparquet(pf, lambda df: Uniq(goto(df)), index, sample))
+    schema = pf.schema_arrow
+    outs = Uniq(
+        aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
+    )
     pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
 
     def split(df):
         vec = goto(df)
         sns = np.unique(vec)
         for sn in sns:
-            pqfs[sn].write_table(df[vec == sn])
+            pqfs[sn].write_table(
+                pa.Table.from_pandas(df[vec == sn].reset_index(drop=True))
+            )
 
-    aparquet(pf, goto, index, sample)
+    aparquet(pf, split, index=index, sample=sample)
