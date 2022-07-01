@@ -1,4 +1,3 @@
-import tensorflow as tf
 from tensorflow import keras as kr
 
 
@@ -95,10 +94,25 @@ class Bicephale:
         s = self.hidden_sig(inputs)
         l = self.hidden_lin(inputs)
 
-        sig = layers.Dense(1, activation="sigmoid")
-        lin = layers.Dense(1, activation="linear")
+        sig = layers.Dense(1, activation="sigmoid", name="cla_out")
+        lin = layers.Dense(1, activation="linear", name="est_out")
         dot = layers.Dot(1)
 
         s = sig(s)
         l = lin(l)
         return dot([s, l])
+
+
+def cephalise(model):
+    """
+    Return the two sub models of the Bicephale model
+
+    Paramaters
+    ----------
+
+    model : keras.Model
+    should be the Bicephal model
+    """
+    cla = kr.Model(model.input, model.get_layer("cla_out").output)
+    est = kr.Model(model.input, model.get_layer("est_out").output)
+    return cla, est
