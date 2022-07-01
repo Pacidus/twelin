@@ -1,3 +1,4 @@
+import tensorflow as tf
 from tensorflow import keras as kr
 
 
@@ -11,7 +12,7 @@ layers = kr.layers
 ################
 # -- Models -- #
 ################
-class DenseBlock(kr.layers.Layer):
+class DenseBlock:
     """
     Dense hidden layers block
 
@@ -25,30 +26,21 @@ class DenseBlock(kr.layers.Layer):
     """
 
     def __init__(self, hidden_units, activation="relu"):
-        kwargs = {"activation": activation}
-        super(DenseBlock, self).__init__()
         self.hidden_units = hidden_units
         self.activation = activation
-        self.dense_layers = [layers.Dense(u, **kwargs) for u in hidden_units]
 
-    def call(self, inputs):
+    def __call__(self, inputs):
+        kwargs = {"activation": self.activation}
+        self.dense_layers = [
+            layers.Dense(u, **kwargs) for u in self.hidden_units
+        ]
         x = inputs
         for layer in self.dense_layers:
             x = layer(x)
         return x
 
-    def get_config(self):
-        return {
-            "hidden_units": self.hidden_units,
-            "activation": self.activation,
-        }
 
-    @classmethod
-    def from_config(cls, config):
-        return cls(**config)
-
-
-class Bicephale(kr.Model):
+class Bicephale:
     r"""
     Bicephale model
 
@@ -88,40 +80,25 @@ class Bicephale(kr.Model):
     """
 
     def __init__(self, Densize, activation="relu"):
-        super(Bicephale, self).__init__()
-
         if type(Densize) is tuple:
             self.Densize = Densize
         else:
             self.Densize = (Densize, Densize)
-
         if type(activation) is tuple:
             self.activation = activation
         else:
             self.activation = (activation, activation)
+        self.hidden_sig = DenseBlock(self.Densize[0], self.activation[0])
+        self.hidden_lin = DenseBlock(self.Densize[1], self.activation[1])
 
-        self.hiden_sig = DenseBlock(self.Densize[0], self.activation[0])
-        self.hiden_lin = DenseBlock(self.Densize[1], self.activation[1])
-        self.sig = layers.Dense(1, activation="sigmoid")
-        self.lin = layers.Dense(1, activation="linear")
-        self.dot = layers.Dot(1)
-
-    def call(self, inputs):
-        self.inputs = inputs
+    def __call__(self, inputs):
         s = self.hidden_sig(inputs)
         l = self.hidden_lin(inputs)
-        s = self.sig(s)
-        l = self.lin(l)
-        return self.dot([s, l])
 
-    def get_cephales(self):
-        sig = kr.Model(self.input, self.sig, name="sig")
-        lin = kr.Model(self.input, self.lin, name="lin")
-        return sig, lin
+        sig = layers.Dense(1, activation="sigmoid")
+        lin = layers.Dense(1, activation="linear")
+        dot = layers.Dot(1)
 
-    def get_config(self):
-        return {"Densize": self.Densize, "activation": self.activation}
-
-    @classmethod
-    def from_config(cls, config):
-        return cls(**config)
+        s = sig(s)
+        l = lin(l)
+        return dot([s, l])
