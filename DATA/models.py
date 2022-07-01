@@ -115,7 +115,9 @@ class Bicephale(kr.Model):
         return self.dot([s, l])
 
     def get_cephales(self):
-        return [self.input, self.sig], [self.input, self.lin]
+        sig = kr.Model(self.input, self.sig, name="sig")
+        lin = kr.Model(self.input, self.lin, name="lin")
+        return sig, lin
 
     def get_config(self):
         return {"Densize": self.Densize, "activation": self.activation}
