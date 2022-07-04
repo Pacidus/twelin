@@ -26,6 +26,10 @@ Uniq = np.unique
 
 
 class upstats:
+    """
+    A class to compute stats through batches
+    """
+
     def __init__(self):
         self.mean = 0.0
         self.var = 0.0
@@ -210,3 +214,38 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
             )
 
     aparquet(pf, split, index=index, sample=sample)
+
+
+def getrand(pf, num, index=didx, sample=dsmpl):
+    """
+    Get random values in the parquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile
+        the parquetfile we want to split
+    num : int
+        number of element we want to get
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
+
+    Returns
+    -------
+    pd.DataFrame : the values selected
+    """
+    Ntot = pf.metadata.num_rows
+    kwargs = {"ignore_index": True}
+
+    class Get:
+        def __init__(self):
+            self.vals = np.random.choice(Ntot, num, replace=False)
+
+        def __call__(self, df):
+            mask = self.vals <= len(df.index)
+            val = self.vals[mask]
+            self.vals = self.vals[~mask] - len(df.index)
+            return df.loc[val]
+
+    return pd.concat(aparquet(pf, Get(), index=index, sample=sample), **kwargs)
