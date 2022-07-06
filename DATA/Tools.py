@@ -166,8 +166,8 @@ def stats(pf, index=didx, sample=dsmpl):
 
     Parameters
     ----------
-    pf : pq.ParquetFile
-        the parquet file we want to itterate through.
+    pf : pq.ParquetFile or str
+        the parquet file or path we want to itterate through.
     index : list(str), optional
         index we want to keep from pf
     sample : int, optional
@@ -179,6 +179,8 @@ def stats(pf, index=didx, sample=dsmpl):
         class with following public variables
             mean, variation, min, max, N
     """
+    if type(pf) is str:
+        pf = pq.ParquetFile(pf)
     vals = upstats()
     aparquet(pf, vals.update, index=index, sample=sample)
     return vals
@@ -199,10 +201,13 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    schema = pf.schema_arrow
-    outs = Uniq(
-        aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
-    )
+    schema = pa.schema([i for i in pf.schema_arrow if i.name in index])
+    outs = aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
+    Outs = []
+    for o in outs:
+        for i in o:
+            Outs.append(i)
+    outs = Uniq(Outs)
     pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
 
     def split(df):
@@ -240,10 +245,10 @@ def getrand(pf, num, index=didx, sample=dsmpl):
 
     class Get:
         def __init__(self):
-            self.vals = np.random.choice(Ntot, num, replace=False)
+            self.vals = np.random.choice(Ntot, num, replace=(Ntot < num))
 
         def __call__(self, df):
-            mask = self.vals <= len(df.index)
+            mask = self.vals < len(df.index)
             val = self.vals[mask]
             self.vals = self.vals[~mask] - len(df.index)
             return df.loc[val]

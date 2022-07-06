@@ -51,4 +51,10 @@ def test_split():
     assert np.abs(statst.min["Int2e"]) < 1e-3
     assert np.abs(statst.max["Int2e"]) < 1e-3
     remove("test/out_False.parquet")
-    remove("test/out_True.parquet")
+
+
+def test_get():
+    pf = Tools.pq.ParquetFile("test/test.parquet")
+    for i in range(100):
+        for j in range(6):
+            assert len(Tools.getrand(pf, 10**j).index) == 10**j

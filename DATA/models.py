@@ -1,4 +1,4 @@
-from tensorflow import keras as kr
+import tensorflow.keras as kr
 
 
 #################
@@ -94,7 +94,9 @@ class Bicephale:
         s = self.hidden_sig(inputs)
         l = self.hidden_lin(inputs)
 
-        sig = layers.Dense(1, activation="sigmoid", name="cla_out")
+        sig = layers.Dense(
+            1, activation="sigmoid", name="cla_out", use_bias=False
+        )
         lin = layers.Dense(1, activation="linear", name="est_out")
         dot = layers.Dot(1)
 
