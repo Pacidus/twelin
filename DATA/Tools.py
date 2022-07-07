@@ -201,7 +201,10 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    schema = pa.schema([i for i in pf.schema_arrow if i.name in index])
+    if index is not None:
+        schema = pa.schema([i for i in pf.schema_arrow if i.name in index])
+    else:
+        schema = pf.schema_arrow
     outs = aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
     Outs = []
     for o in outs:

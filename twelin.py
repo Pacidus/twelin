@@ -61,10 +61,10 @@ tls.sparq(pf, goto, "spfiles/bi", index, 10**5)
 files = glob.glob("spfiles/bi_*.parquet")
 prop = [tls.stats(files[i]).N / stats.N for i in range(len(files))]
 prop = np.minimum(np.array(prop), 10 * np.min(prop))
-prop[0] = 2 * np.sum(prop[1:])
+prop[0] = 20 * np.sum(prop[1:])
 print(prop)
 
-comkwa = {"trainsize": 10**4, "sample": 10**5, "Nepoch": 10, "Nsets": 2}
+comkwa = {"trainsize": 10**4, "sample": 10**5, "Nepoch": 5, "Nsets": 10}
 x, y = xyest(tls.getrand(pf, 1400000, index, 10**5))
 plt.subplot(131)
 plt.plot(y, model(x.values), ".", markersize=1)
@@ -77,7 +77,7 @@ plt.savefig("etape_0.png", dpi=600)
 plt.cla()
 plt.clf()
 plt.close()
-for i in range(10):
+for i in range(100):
     comkwa["nfile"] = "cla.csv"
     tr.train(cla, xycla, files, prop, **comkwa)
     comkwa["nfile"] = "est.csv"

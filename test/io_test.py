@@ -51,6 +51,7 @@ def test_split():
     assert np.abs(statst.min["Int2e"]) < 1e-3
     assert np.abs(statst.max["Int2e"]) < 1e-3
     remove("test/out_False.parquet")
+    remove("test/out_True.parquet")
 
 
 def test_get():
