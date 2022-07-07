@@ -26,6 +26,10 @@ Uniq = np.unique
 
 
 class upstats:
+    """
+    A class to compute stats through batches
+    """
+
     def __init__(self):
         self.mean = 0.0
         self.var = 0.0
@@ -162,8 +166,8 @@ def stats(pf, index=didx, sample=dsmpl):
 
     Parameters
     ----------
-    pf : pq.ParquetFile
-        the parquet file we want to itterate through.
+    pf : pq.ParquetFile or str
+        the parquet file or path we want to itterate through.
     index : list(str), optional
         index we want to keep from pf
     sample : int, optional
@@ -175,6 +179,8 @@ def stats(pf, index=didx, sample=dsmpl):
         class with following public variables
             mean, variation, min, max, N
     """
+    if type(pf) is str:
+        pf = pq.ParquetFile(pf)
     vals = upstats()
     aparquet(pf, vals.update, index=index, sample=sample)
     return vals
@@ -195,10 +201,16 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     sample : int, optional
         size of the sample
     """
-    schema = pf.schema_arrow
-    outs = Uniq(
-        aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
-    )
+    if index is not None:
+        schema = pa.schema([i for i in pf.schema_arrow if i.name in index])
+    else:
+        schema = pf.schema_arrow
+    outs = aparquet(pf, lambda df: Uniq(goto(df)), index=index, sample=sample)
+    Outs = []
+    for o in outs:
+        for i in o:
+            Outs.append(i)
+    outs = Uniq(Outs)
     pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
 
     def split(df):
@@ -210,3 +222,38 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
             )
 
     aparquet(pf, split, index=index, sample=sample)
+
+
+def getrand(pf, num, index=didx, sample=dsmpl):
+    """
+    Get random values in the parquet file
+
+    Parameters
+    ----------
+    pf : pq.ParquetFile
+        the parquetfile we want to split
+    num : int
+        number of element we want to get
+    index : list(str), optional
+        index we want to keep from pf
+    sample : int, optional
+        size of the sample
+
+    Returns
+    -------
+    pd.DataFrame : the values selected
+    """
+    Ntot = pf.metadata.num_rows
+    kwargs = {"ignore_index": True}
+
+    class Get:
+        def __init__(self):
+            self.vals = np.random.choice(Ntot, num, replace=(Ntot < num))
+
+        def __call__(self, df):
+            mask = self.vals < len(df.index)
+            val = self.vals[mask]
+            self.vals = self.vals[~mask] - len(df.index)
+            return df.loc[val]
+
+    return pd.concat(aparquet(pf, Get(), index=index, sample=sample), **kwargs)
