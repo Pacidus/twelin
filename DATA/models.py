@@ -12,8 +12,7 @@ layers = kr.layers
 # -- Models -- #
 ################
 class DenseBlock:
-    """
-    Dense hidden layers block
+    """Dense hidden layers block
 
     Parameters
     ----------
@@ -22,6 +21,7 @@ class DenseBlock:
         the size of the different layers in the block
     activation: str, optional
         the name of the activation function
+
     """
 
     def __init__(self, hidden_units, activation="relu"):
@@ -40,29 +40,20 @@ class DenseBlock:
 
 
 class Bicephale:
-    r"""
-    Bicephale model
+    """Bicephale model
 
     the geometry of the model is the folowing :
 
-         +-------+
-         | Input |
-         +-------+
-           /   \
-          /     \
-    +-------+ +-------+
-    | Dense | | Dense |
-    | Block | | Block |
-    +-------+ +-------+
-        |         |
-    +-------+ +-------+
-    |  Sig  | |  Lin  |
-    +-------+ +-------+
-        \         /
-         \       /
-      +-------------+
-      | dot product |
-      +-------------+
+    +---------------+
+    |     Input     |
+    +-------+-------+
+    | Dense | Dense |
+    | Block | Block |
+    +-------+-------+
+    |  Sig  |  Lin  |
+    +-------+-------+
+    |  dot product  |
+    +---------------+
 
     Parameters
     ----------
@@ -76,6 +67,7 @@ class Bicephale:
         the name of the activation function in the DenseBlock if it's a tuple
         the first goes define the sig part (the classifier) and the second
         define the lin part (the estimator).
+
     """
 
     def __init__(self, Densize, activation="relu"):
@@ -106,14 +98,14 @@ class Bicephale:
 
 
 def cephalise(model):
-    """
-    Return the two sub models of the Bicephale model
+    """Return the two sub models of the Bicephale model
 
-    Paramaters
+    Parameters
     ----------
 
     model : keras.Model
-    should be the Bicephal model
+        should be the Bicephal model
+
     """
     cla = kr.Model(model.input, model.get_layer("cla_out").output)
     est = kr.Model(model.input, model.get_layer("est_out").output)
