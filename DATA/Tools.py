@@ -195,7 +195,8 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     pf : pq.ParquetFile
         the parquetfile we want to split
     goto : python function
-        function that return a list that assign any row to a number
+        function that return a list that assign any row to a label,
+        if it returns -1 no file is created.
     index : list(str), optional
         index we want to keep from pf
     sample : int, optional
