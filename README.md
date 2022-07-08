@@ -13,6 +13,9 @@ two majors issue :
 
 This project contains :
 - DATA :
+
     This library is a set of tools that deals with the dataset
     and the training.
 - test :
+
+    A series
