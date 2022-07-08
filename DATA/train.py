@@ -5,8 +5,7 @@ import pyarrow.parquet as pq
 
 
 def getdta(files, sizes, sample):
-    """
-    get the data for the training
+    """get the data for the training
 
     Parameters
     ----------
@@ -23,6 +22,7 @@ def getdta(files, sizes, sample):
 
     pd.DataFrame :
         Concat the data of the different files
+
     """
     dta = [ts.getrand(i, j, sample=sample) for i, j in zip(files, sizes)]
     return pd.concat(dta, ignore_index=True)
@@ -31,8 +31,7 @@ def getdta(files, sizes, sample):
 def train(
     model, xy, files, prop, trainsize, sample, Nepoch, Nsets, nfile=None
 ):
-    """
-    train the model with a dataset composed with some proportions of others
+    """train the model with a dataset composed with some proportions of others
 
     Parameters
     ----------
@@ -57,6 +56,7 @@ def train(
         number of sets of training before stoping the training
     nfile : str, optinal
         the name of the csv file the data will be concatenate into
+
     """
     pfiles = [pq.ParquetFile(i) for i in files]
     ratios = np.array(prop) / np.sum(prop)

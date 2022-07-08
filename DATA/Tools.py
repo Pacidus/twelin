@@ -26,9 +26,7 @@ Uniq = np.unique
 
 
 class upstats:
-    """
-    A class to compute stats through batches
-    """
+    """A class to compute stats through batches"""
 
     def __init__(self):
         self.mean = 0.0
@@ -39,13 +37,13 @@ class upstats:
         self.__first__ = True
 
     def update(self, df):
-        """
-        update the statistics of the hole set through batches
+        """update the statistics of the hole set through batches
 
         Parameters
         ----------
         df : pd.DataFrame
             the new batch to update the stats with
+
         """
         if not self.__first__:
             Na = self.N
@@ -74,17 +72,17 @@ class upstats:
 
 
 def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
-    """
-    apply a function on a parquet file by sample.
+    """apply a function on a parquet file by sample.
 
     Parameters
     ----------
     pf : pq.ParquetFile
-        the parquet file we want to itterate through.
+        the parquet file we want to itterate through
     func : python function
-        funtion that take a panda dataframe in input and *args, **kwargs.
+        funtion that take a panda dataframe in input and
+        ``*args``, ``**kwargs``
     args : list or tuple, optional
-        arguments of func.
+        arguments of func
     kwargs : dict, optional
         keyword arguments of func
     index : list(str), optional
@@ -94,8 +92,9 @@ def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
 
     Returns
     -------
-    list
-        list of the outputs of func(dtf, *args, **kwargs)
+    list :
+        list of the outputs of ``func(dtf, *args, **kwargs)``
+
     """
     batches = pf.iter_batches(sample, columns=index)
     out = []
@@ -106,8 +105,7 @@ def aparquet(pf, func, args=darg, kwargs=dkwa, index=didx, sample=dsmpl):
 
 
 def parquet2csv(name, pf, index=didx, sample=dsmpl):
-    """
-    Convert a parquet file to a csv file
+    """Convert a parquet file to a csv file
 
     Parameters
     ----------
@@ -119,6 +117,7 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
         index we want to keep from pf
     sample : int, optional
         size of the sample
+
     """
     if type(pf) is str:
         pf = pq.ParquetFile(pf)
@@ -136,8 +135,7 @@ def parquet2csv(name, pf, index=didx, sample=dsmpl):
 
 
 def csv2parquet(pname, name, index=didx, sample=dsmpl):
-    """
-    Convert a csv file into a parquet file
+    """Convert a csv file into a parquet file
 
     Parameters
     ----------
@@ -149,6 +147,7 @@ def csv2parquet(pname, name, index=didx, sample=dsmpl):
         index we want to keep from pf
     sample : int, optional
         size of the sample
+
     """
     with pd.read_csv(name, usecols=index, chunksize=sample) as reader:
         chunk = next(reader)
@@ -161,8 +160,7 @@ def csv2parquet(pname, name, index=didx, sample=dsmpl):
 
 
 def stats(pf, index=didx, sample=dsmpl):
-    """
-    Gather statistical data over the parquet file
+    """Gather statistical data over the parquet file
 
     Parameters
     ----------
@@ -178,6 +176,7 @@ def stats(pf, index=didx, sample=dsmpl):
     upstats:
         class with following public variables
             mean, variation, min, max, N
+
     """
     if type(pf) is str:
         pf = pq.ParquetFile(pf)
@@ -187,19 +186,20 @@ def stats(pf, index=didx, sample=dsmpl):
 
 
 def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
-    """
-    Split a parquet file into many subparquet file
+    """Split a parquet file into many subparquet file
 
     Parameters
     ----------
     pf : pq.ParquetFile
         the parquetfile we want to split
     goto : python function
-        function that return a list that assign any row to a number
+        function that return a list that assign any row to a label,
+        if it returns -1 no file is created and the row is discarded.
     index : list(str), optional
         index we want to keep from pf
     sample : int, optional
         size of the sample
+
     """
     if index is not None:
         schema = pa.schema([i for i in pf.schema_arrow if i.name in index])
@@ -211,11 +211,13 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
         for i in o:
             Outs.append(i)
     outs = Uniq(Outs)
+    outs = outs[~(outs == -1)]
     pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
 
     def split(df):
         vec = goto(df)
         sns = np.unique(vec)
+        sns = sns[~(sns == -1)]
         for sn in sns:
             pqfs[sn].write_table(
                 pa.Table.from_pandas(df[vec == sn].reset_index(drop=True))
@@ -225,8 +227,7 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
 
 
 def getrand(pf, num, index=didx, sample=dsmpl):
-    """
-    Get random values in the parquet file
+    """Get random values in the parquet file
 
     Parameters
     ----------
@@ -242,6 +243,7 @@ def getrand(pf, num, index=didx, sample=dsmpl):
     Returns
     -------
     pd.DataFrame : the values selected
+
     """
     Ntot = pf.metadata.num_rows
     kwargs = {"ignore_index": True}

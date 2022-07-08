@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>DATA &#8212; twelin 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="twelin" href="readme.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme.html" title="twelin"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">twelin 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">DATA</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-DATA">
+<span id="data"></span><h1>DATA<a class="headerlink" href="#module-DATA" title="Permalink to this heading">¶</a></h1>
+<section id="module-DATA.Tools">
+<span id="tools"></span><h2>Tools<a class="headerlink" href="#module-DATA.Tools" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.aparquet">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">aparquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.aparquet" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply a function on a parquet file by sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pf</strong> (<em>pq.ParquetFile</em>) – the parquet file we want to itterate through</p></li>
+<li><p><strong>func</strong> (<em>python function</em>) – funtion that take a panda dataframe in input and
+<code class="docutils literal notranslate"><span class="pre">*args</span></code>, <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code></p></li>
+<li><p><strong>args</strong> (<em>list</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – arguments of func</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – keyword arguments of func</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of the outputs of <code class="docutils literal notranslate"><span class="pre">func(dtf,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.csv2parquet">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">csv2parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.csv2parquet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a csv file into a parquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pname</strong> (<em>str</em>) – the path of the parquet file</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – the name of the file</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.getrand">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">getrand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.getrand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get random values in the parquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pf</strong> (<em>pq.ParquetFile</em>) – the parquetfile we want to split</p></li>
+<li><p><strong>num</strong> (<em>int</em>) – number of element we want to get</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pd.DataFrame</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the values selected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.parquet2csv">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">parquet2csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.parquet2csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a parquet file to a csv file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – the name of the file</p></li>
+<li><p><strong>pf</strong> (<em>pq.ParquetFile</em><em> or </em><em>str</em>) – the parquet file or path</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.sparq">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">sparq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.sparq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a parquet file into many subparquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pf</strong> (<em>pq.ParquetFile</em>) – the parquetfile we want to split</p></li>
+<li><p><strong>goto</strong> (<em>python function</em>) – function that return a list that assign any row to a number</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.Tools.stats">
+<span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather statistical data over the parquet file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pf</strong> (<em>pq.ParquetFile</em><em> or </em><em>str</em>) – the parquet file or path we want to itterate through.</p></li>
+<li><p><strong>index</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>, </em><em>optional</em>) – index we want to keep from pf</p></li>
+<li><p><strong>sample</strong> (<em>int</em><em>, </em><em>optional</em>) – size of the sample</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>class with following public variables</dt><dd><p>mean, variation, min, max, N</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#DATA.Tools.upstats" title="DATA.Tools.upstats">upstats</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="DATA.Tools.upstats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DATA.Tools.</span></span><span class="sig-name descname"><span class="pre">upstats</span></span><a class="headerlink" href="#DATA.Tools.upstats" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to compute stats through batches</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DATA.Tools.upstats.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.Tools.upstats.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update the statistics of the hole set through batches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the new batch to update the stats with</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-DATA.models">
+<span id="models"></span><h2>models<a class="headerlink" href="#module-DATA.models" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="DATA.models.Bicephale">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DATA.models.</span></span><span class="sig-name descname"><span class="pre">Bicephale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Densize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'relu'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.models.Bicephale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bicephale model</p>
+<p>the geometry of the model is the folowing :</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td colspan="2"><p>Input</p></td>
+</tr>
+<tr class="row-even"><td><p>Dense
+Block</p></td>
+<td><p>Dense
+Block</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sig</p></td>
+<td><p>Lin</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>dot product</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Densize</strong> (<em>list</em><em>(</em><em>int</em><em>) or </em><em>(</em><em>list</em><em>(</em><em>int</em><em>)</em><em>, </em><em>list</em><em>(</em><em>int</em><em>)</em><em>)</em>) – the size of the different layers in the DenseBlock if it’s a tuple the
+first goes define the sig part (the classifier) and the second define
+the lin part (the estimator).</p></li>
+<li><p><strong>activation</strong> (<em>str</em><em> or </em><em>(</em><em>str</em><em>, </em><em>str</em><em>)</em><em>, </em><em>optional</em>) – the name of the activation function in the DenseBlock if it’s a tuple
+the first goes define the sig part (the classifier) and the second
+define the lin part (the estimator).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="DATA.models.DenseBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DATA.models.</span></span><span class="sig-name descname"><span class="pre">DenseBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'relu'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.models.DenseBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dense hidden layers block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hidden_units</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – the size of the different layers in the block</p></li>
+<li><p><strong>activation</strong> (<em>str</em><em>, </em><em>optional</em>) – the name of the activation function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.models.cephalise">
+<span class="sig-prename descclassname"><span class="pre">DATA.models.</span></span><span class="sig-name descname"><span class="pre">cephalise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.models.cephalise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the two sub models of the Bicephale model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>keras.Model</em>) – should be the Bicephal model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-DATA.train">
+<span id="train"></span><h2>train<a class="headerlink" href="#module-DATA.train" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.train.getdta">
+<span class="sig-prename descclassname"><span class="pre">DATA.train.</span></span><span class="sig-name descname"><span class="pre">getdta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.train.getdta" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the data for the training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list</em><em>(</em><em>pq.Parquetfile</em><em>)</em>) – should be the same len as prop and it list the parquet file we want
+compose the training set from</p></li>
+<li><p><strong>sizes</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – the given number of values we want to get from each files</p></li>
+<li><p><strong>sample</strong> (<em>int</em>) – size of the samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Concat the data of the different files</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DATA.train.train">
+<span class="sig-prename descclassname"><span class="pre">DATA.train.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nepoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DATA.train.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the model with a dataset composed with some proportions of others</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>keras.Model</em>) – the model we want to train</p></li>
+<li><p><strong>xy</strong> (<em>python function</em><em>, </em><em>pd.dataframe -&gt;</em><em> (</em><em>x</em><em>,</em><em>y</em><em>)</em>) – this function transform a pandas dataframe to a tuple input output for
+the training</p></li>
+<li><p><strong>files</strong> (<em>list</em><em>(</em><em>pq.Parquetfile</em><em>)</em>) – should be the same len as prop and it list the parquet file we want
+compose the training set from</p></li>
+<li><p><strong>prop</strong> (<em>list</em><em>(</em><em>float</em><em>)</em><em>, </em><em>(or </em><em>equivalent</em><em>)</em>) – the given proportion we should put from every file (it’s normalized)</p></li>
+<li><p><strong>trainsize</strong> (<em>int</em>) – size of the training set</p></li>
+<li><p><strong>sample</strong> (<em>int</em>) – size of the sample wen we’re doing file stuffs (look at Tools)</p></li>
+<li><p><strong>Nepoch</strong> (<em>int</em>) – number of epoch for the fit function</p></li>
+<li><p><strong>Nsets</strong> (<em>int</em>) – number of sets of training before stoping the training</p></li>
+<li><p><strong>nfile</strong> (<em>str</em><em>, </em><em>optinal</em>) – the name of the csv file the data will be concatenate into</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">DATA</a><ul>
+<li><a class="reference internal" href="#module-DATA.Tools">Tools</a></li>
+<li><a class="reference internal" href="#module-DATA.models">models</a></li>
+<li><a class="reference internal" href="#module-DATA.train">train</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="readme.html"
+                          title="previous chapter">twelin</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/API.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme.html" title="twelin"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">twelin 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">DATA</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Yohan Duarte.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.1.
+    </div>
+  </body>
+</html>
