@@ -1,5 +1,0 @@
-numpy
-tensorflow
-keras
-pyarrow
-pandas > 1.15
