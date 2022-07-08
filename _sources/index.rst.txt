@@ -6,9 +6,15 @@
 .. include:: ../../README.md
    :parser: myst_parser.sphinx_
 
+
+Documents
+=========
+
 .. toctree::
-    readme
-    API
+   :maxdepth: 1
+
+   report
+   API
 
 Indices and tables
 ==================
