@@ -193,7 +193,8 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
     pf : pq.ParquetFile
         the parquetfile we want to split
     goto : python function
-        function that return a list that assign any row to a number
+        function that return a list that assign any row to a label,
+        if it returns -1 no file is created and the row is discarded.
     index : list(str), optional
         index we want to keep from pf
     sample : int, optional
@@ -210,11 +211,13 @@ def sparq(pf, goto, name="out", index=didx, sample=dsmpl):
         for i in o:
             Outs.append(i)
     outs = Uniq(Outs)
+    outs = outs[~(outs == -1)]
     pqfs = {i: pq.ParquetWriter(f"{name}_{i}.parquet", schema) for i in outs}
 
     def split(df):
         vec = goto(df)
         sns = np.unique(vec)
+        sns = sns[~(sns == -1)]
         for sn in sns:
             pqfs[sn].write_table(
                 pa.Table.from_pandas(df[vec == sn].reset_index(drop=True))
