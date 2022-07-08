@@ -16,6 +16,12 @@ This project contains :
 
     This library is a set of tools that deals with the dataset
     and the training.
+- docs :
+
+    The reports and the website documenting this project.
+- examples :
+
+    Some commented and working examples.
 - test :
 
-    A series
+    A series of test to assert the basic functions works.
