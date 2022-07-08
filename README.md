@@ -12,4 +12,5 @@ two majors issue :
 - the over representation of near zeros values in the dataset
 
 This project contains :
-Series of tools for making artificials neural networks and for the training.
+- DATA :
+    A set of tools for dealing with .
